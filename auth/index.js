@@ -12,20 +12,7 @@ const User = require('../db/models/User');
 
 const config = require('./config');
 
-// passport.serializeUser((user, done) => {
-//   done(null, user._id)
-// })
-
-// passport.deserializeUser((id, done) => {
-//   User.findById(id, function(err, user){
-//     if(err){
-//       done(err, null);
-//     }else{
-//       done(null, user);
-//     }
-//   })
-// })
-
+//Using Passport-Facebook
 passport.use(new FacebookStrategy(config.facebookAuth, function (accessToken, refreshToken, profile, done) {
   console.log(profile, accessToken);
   User
@@ -55,8 +42,6 @@ passport.use(new FacebookStrategy(config.facebookAuth, function (accessToken, re
     })
 }));
 
-
-
 const jwtOptions = {
   jwtFromRequest: passportJwt.ExtractJwt.fromAuthHeaderWithScheme('jwt'),
   secretOrKey: 'superSecretKey',
@@ -64,6 +49,7 @@ const jwtOptions = {
   audience: 'fullStackAuthApp'
 }
 
+//Using Passport JWT
 passport.use(new PassportStrategy(jwtOptions, (payload, done) => {
   console.log('INSIE JWT STRATEGY', payload)
   User
